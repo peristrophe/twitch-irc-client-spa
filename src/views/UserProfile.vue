@@ -1,20 +1,25 @@
 <template>
   <div class="profile">
     <p class="users-icon">
-      <a :href="authurl"><img src="../assets/anonymous.png"></a>
+      <a :href="authurl"><img :src="userprofile.icon"></a>
     </p>
-    <h2 class="user-id">Anonymous User</h2>
+    <h2 class="user-name">{{ userprofile.name }}</h2>
     <hr/>
     <p>Please, authorization on twitch.</p>
   </div>
 </template>
 
 <script>
-const base64url = require('base64url')
+import base64url from "base64url"
+
 export default {
   name: 'profile',
   data () {
     return {
+      userprofile: {
+        name: 'Anonymous User',
+        icon: '../assets/anonymous.png'
+      },
       authendpoint: 'https://id.twitch.tv/oauth2/authorize',
       params: {
         client_id: '122xg9vquuuq3zi6w610iibumg5j15',
@@ -29,6 +34,14 @@ export default {
           }
         }
       }
+    }
+  },
+  created: function () {
+    if (this.decoded_id_token === null) {
+      void(0)
+    } else {
+      this.userprofile.name = this.decoded_id_token.preferred_username || 'Anonymous User'
+      this.userprofile.icon = this.decoded_id_token.picture || '../assets/anonymous.png'
     }
   },
   computed: {
@@ -49,20 +62,24 @@ export default {
       return this.authendpoint + '?' + this.queryparams
     },
     hashvalues: function () {
-      if (document.location.hash) {
+      try {
         return document.location.hash.slice(1).split('&').map(
           function (value) {
             var dic = {}
             dic[value.split('=')[0]] = value.split('=')[1]
             return dic
           }
-        ).reduce((a,b) => Object.assign(a,b,{}))
-      } else {
+        ).reduce((a,b) => Object.assign(a,b,{})) || null
+      } catch(e) {
         return null
       }
     },
     decoded_id_token: function () {
-      return this.hashvalues.id_token
+      try {
+        return JSON.parse(base64url.decode(this.hashvalues.id_token.split('.')[1]))
+      } catch(e) {
+        return null
+      }
     }
   }
 }
@@ -84,7 +101,7 @@ export default {
   height: 150px;
 }
 
-.user-id {
+.user-name {
   font-weight: bold;
 }
 </style>
