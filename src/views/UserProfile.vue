@@ -1,35 +1,30 @@
 <template>
   <div class="profile">
-    <p class="user-icon">
-      <a :href="authurl">
-        <p v-if="is_valid_hash"><img :src="userprofile.icon" /></p>
-        <p v-else><img src="../assets/anonymous.png" /></p>
-      </a>
-    </p>
-    <h2 class="user-name">{{ userprofile.name }}</h2>
+    <a :href="authurl">
+      <p v-if="has_userprofile" class="usericon">
+        <img :src="$props.userprofile.picture"/>
+      </p>
+      <p v-else class="usericon">
+        <img src="../assets/anonymous.png"/>
+      </p>
+    </a>
+    <h2 class="username">{{ $props.userprofile.display_name }}</h2>
     <hr/>
     <p>Please, authorization on twitch.</p>
   </div>
 </template>
 
 <script>
-import base64url from "base64url"
-
 export default {
   name: 'profile',
   data () {
     return {
-      userprofile: {
-        name: '',
-        icon: ''
-      },
-      // for Authorizing with OpenID Connect
       authendpoint: 'https://id.twitch.tv/oauth2/authorize',
       params: {
         client_id: '122xg9vquuuq3zi6w610iibumg5j15',
         redirect_uri: 'http://localhost:8080',
         response_type: 'token+id_token',
-        scope: 'chat:read+chat:edit+openid',
+        scope: 'chat:read+chat:edit+user:read:email+openid',
         claims: {
           id_token: {
             email_verified: null,
@@ -40,13 +35,13 @@ export default {
       }
     }
   },
-  created: function () {
-    if (this.is_valid_hash) {
-      this.userprofile.name = this.decoded_id_token.preferred_username
-      this.userprofile.icon = this.decoded_id_token.picture
-    }
+  props: {
+    userprofile: Object
   },
   computed: {
+    authurl: function () {
+      return this.authendpoint + '?' + this.queryparams
+    },
     queryparams: function () {
       const self = this
 
@@ -60,31 +55,8 @@ export default {
         }
       ).join('&')
     },
-    authurl: function () {
-      return this.authendpoint + '?' + this.queryparams
-    },
-    hashvalues: function () {
-      try {
-        return document.location.hash.slice(1).split('&').map(
-          function (value) {
-            var dic = {}
-            dic[value.split('=')[0]] = value.split('=')[1]
-            return dic
-          }
-        ).reduce((a,b) => Object.assign(a,b,{})) || null
-      } catch(e) {
-        return null
-      }
-    },
-    decoded_id_token: function () {
-      try {
-        return JSON.parse(base64url.decode(this.hashvalues.id_token.split('.')[1]))
-      } catch(e) {
-        return null
-      }
-    },
-    is_valid_hash: function () {
-      if (this.decoded_id_token === null) {
+    has_userprofile: function () {
+      if (this.$props.userprofile.id === null) {
         return false
       } else {
         return true
@@ -99,18 +71,18 @@ export default {
   border: solid 1px;
   width: 80%;
 }
-.user-icon {
+.usericon {
   margin: 50px;
 }
 
-.user-icon img {
+.usericon img {
   border-radius: 50%;
   border: solid 1px #c0c0c0;
   width: 150px;
   height: 150px;
 }
 
-.user-name {
+.username {
   font-weight: bold;
 }
 </style>
