@@ -10,6 +10,7 @@
 
 <script>
 import base64url from "base64url"
+import axios from "axios"
 
 export default {
   name: 'app',
@@ -18,12 +19,12 @@ export default {
       httpclient: null,
       userprofile: {
         id: null,
-        login_name: null,
+        login_name: 'justinfan12345',
         display_name: 'Anonymous User',
         picture: null
       },
-      id_token: {},
-      userinfo: null
+      access_token: null,
+      id_token: {}
     }
   },
   methods: {
@@ -33,12 +34,16 @@ export default {
   },
   created: function () {
     if (this.has_valid_hash) {
+      this.access_token = this.hashvalues.access_token
+      this.id_token = this.decoded_id_token
+
       this.userprofile.id = this.decoded_id_token.sub
       this.userprofile.picture = this.decoded_id_token.picture
       this.userprofile.display_name = this.decoded_id_token.preferred_username
-      this.id_token = this.decoded_id_token
-      axios.get('https://api.twitch.tv/helix/users?id=' + this.userprofile.id)
-      .then(response => (this.userinfo = JSON.parse(response)))
+      
+      var customheader = { headers: {'Authorization': `Bearer ${this.access_token}`} }
+      axios.get(`https://api.twitch.tv/helix/users?id=${this.userprofile.id}`, customheader)
+      .then(response => (this.userprofile.login_name = response.data.data[0].login))
     }
   },
   computed: {
