@@ -1,7 +1,10 @@
 <template>
   <div class="profile">
-    <p class="users-icon">
-      <a :href="authurl"><img :src="userprofile.icon"></a>
+    <p class="user-icon">
+      <a :href="authurl">
+        <p v-if="is_valid_hash"><img :src="userprofile.icon" /></p>
+        <p v-else><img src="../assets/anonymous.png" /></p>
+      </a>
     </p>
     <h2 class="user-name">{{ userprofile.name }}</h2>
     <hr/>
@@ -17,9 +20,10 @@ export default {
   data () {
     return {
       userprofile: {
-        name: 'Anonymous User',
-        icon: '../assets/anonymous.png'
+        name: '',
+        icon: ''
       },
+      // for Authorizing with OpenID Connect
       authendpoint: 'https://id.twitch.tv/oauth2/authorize',
       params: {
         client_id: '122xg9vquuuq3zi6w610iibumg5j15',
@@ -37,11 +41,9 @@ export default {
     }
   },
   created: function () {
-    if (this.decoded_id_token === null) {
-      void(0)
-    } else {
-      this.userprofile.name = this.decoded_id_token.preferred_username || 'Anonymous User'
-      this.userprofile.icon = this.decoded_id_token.picture || '../assets/anonymous.png'
+    if (this.is_valid_hash) {
+      this.userprofile.name = this.decoded_id_token.preferred_username
+      this.userprofile.icon = this.decoded_id_token.picture
     }
   },
   computed: {
@@ -80,6 +82,13 @@ export default {
       } catch(e) {
         return null
       }
+    },
+    is_valid_hash: function () {
+      if (this.decoded_id_token === null) {
+        return false
+      } else {
+        return true
+      }
     }
   }
 }
@@ -90,11 +99,11 @@ export default {
   border: solid 1px;
   width: 80%;
 }
-.users-icon {
+.user-icon {
   margin: 50px;
 }
 
-.users-icon img {
+.user-icon img {
   border-radius: 50%;
   border: solid 1px #c0c0c0;
   width: 150px;
