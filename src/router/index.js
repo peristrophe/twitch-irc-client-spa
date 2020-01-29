@@ -1,23 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import UserProfile from '../views/UserProfile.vue'
+import Settings from '../views/Settings.vue'
+import Chat from '../views/Chat.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'user',
-    component: UserProfile
+    name: 'settings',
+    component: Settings
   },
   {
     path: '/chat',
     name: 'chat',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    //component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    component: () => import('../views/Chat.vue')
+    component: Chat
   }
 ]
 
