@@ -1,8 +1,16 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Setting</router-link> |
-      <router-link to="/chat">Chat</router-link>
+      <template v-if="$route.path == '/chat'">
+        <router-link to="/">
+          <p class="nav-link"><img src="./assets/icon-gear-white.png"></p>
+        </router-link>
+      </template>
+      <template v-else>
+        <router-link to="/chat">
+          <p class="nav-link"><img src="./assets/icon-dialogue-white.png"></p>
+        </router-link>
+      </template>
     </div>
     <router-view/>
   </div>
@@ -67,7 +75,11 @@ export default {
 }
 
 #nav {
-  padding: 30px;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 60px;
 }
 
 #nav a {
@@ -77,5 +89,22 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+#nav .nav-link {
+  position: absolute;
+  right: 0px;
+  width: 60px;
+  height: 60px;
+  margin: 0px;
+  border-radius: 0px 0px 0px 100%;
+  background-color: #0f0f5e;
+  text-align: right;
+}
+
+#nav .nav-link img {
+  margin: 5px;
+  width: 40px;
+  height: 40px;
 }
 </style>
