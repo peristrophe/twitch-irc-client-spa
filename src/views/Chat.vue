@@ -7,10 +7,15 @@
         </li>
       </ul>
     </p>
+    <div class="msg-form">
+      <FormWithButton formLabel="Message" buttonLabel="Send" v-on:submitValue="say"/>
+    </div>
   </div>
 </template>
 
 <script>
+import FormWithButton from '@/components/FormWithButton.vue'
+
 export default {
   name: 'Chat',
   data () {
@@ -18,13 +23,22 @@ export default {
       msg: []
     }
   },
+  components: {
+    FormWithButton
+  },
   methods: {
     autoScroll: function () {
       var obj = document.getElementById('chatScreen')
       obj.scrollTo(0, obj.scrollHeight)
+    },
+    say: function (message) {
+      this.$wss.send(`PRIVMSG #${this.$channelProfile.name} :${message}`)
     }
   },
   created: function () {
+    if (this.$channelProfile.name == '') {
+      return
+    }
     const self = this
 
     // ref: https://dev.twitch.tv/docs/irc/guide/
@@ -71,11 +85,30 @@ export default {
 h3 {
   margin: 40px 0 0;
 }
+.chat {
+  position: fixed;
+  left: 0px;
+  top: 80px;
+  width: 100%;
+  height: 75%;
+}
 .chat p {
   display: block;
-  height: 70vh;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
   overflow: scroll;
   word-wrap: break-word;
+  margin: 0px;
+}
+.msg-form {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 50px;
 }
 ul {
   list-style-type: disc;

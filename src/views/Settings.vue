@@ -5,7 +5,7 @@
         <img :src="$userProfile.picture"/>
       </p>
       <p v-else class="usericon">
-        <img src="../assets/anonymous.png"/>
+        <img src="../assets/thumb-anonymous.png"/>
       </p>
     </a>
     <h2 class="username">{{ $userProfile.displayName }}</h2>
@@ -26,37 +26,6 @@ export default {
   methods: {
     applyChannel: function (channel) {
       this.$channelProfile.name = channel
-    },
-    connect: function (channel) {
-      if (this.$channelProfile.name === channel) {
-        return
-      }
-      const self = this
-
-      // ref: https://dev.twitch.tv/docs/irc/guide/
-      if (self.$wss === null) {
-        self.$wss = new WebSocket('wss://irc-ws.chat.twitch.tv:443')
-
-        self.$wss.onopen = function () {
-          self.$wss.send('CAP REQ :twitch.tv/tags twitch.tv/commands\r\n')
-          self.$wss.send(`PASS oauth:${self.$accessToken}\r\n`)
-          self.$wss.send(`NICK ${self.$userProfile.loginName}\r\n`)
-          self.$wss.send(`JOIN #${channel}\r\n`)
-        }
-
-        self.$wss.onmessage = function (event) {
-          if (event.data.startsWith('PING')) {
-            self.$wss.send('PONG :tmi.twitch.tv\r\n')
-          } else {
-            self.$chatLog.push(event.data)
-          }
-        }
-
-        self.$channelProfile.channel = channel
-      } else if (self.$wss.readyState == WebSocket.OPEN) {
-        self.$wss.send(`PART #${self.$channelProfile.name}`)
-        self.$wss.send(`JOIN #${channel}\r\n`)
-      }
     }
   },
   computed: {
@@ -102,6 +71,13 @@ export default {
 </script>
 
 <style>
+.settings {
+  position: fixed;
+  left: 0px;
+  top: 80px;
+  width: 100%;
+  height: 70%;
+}
 .usericon {
   margin: 50px;
 }
