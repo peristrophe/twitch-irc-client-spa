@@ -94,7 +94,7 @@ h3 {
 .chat p {
   overflow: scroll;
   word-wrap: break-word;
-  height: 80vh;
+  height: 70vh;
   margin: 0px;
   border-radius: 10px;
   box-shadow: 2px 2px 3px 3px rgba(0,0,0,0.1) inset;
