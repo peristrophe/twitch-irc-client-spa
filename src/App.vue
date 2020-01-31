@@ -1,16 +1,16 @@
 <template>
   <div id="app">
     <div id="nav">
-      <template v-if="$route.path == '/chat'">
         <router-link to="/">
-          <p class="nav-link"><img src="./assets/icon-gear-white.png"></p>
+          <div class="nav-link round-l">
+            <p :class="attrLinkS"><img src="./assets/icon-gear-white.png"/>Set</p>
+          </div>
         </router-link>
-      </template>
-      <template v-else>
         <router-link to="/chat">
-          <p class="nav-link"><img src="./assets/icon-dialogue-white.png"></p>
+          <div class="nav-link round-r">
+            <p :class="attrLinkC"><img src="./assets/icon-dialogue-white.png"/>Chat</p>
+          </div>
         </router-link>
-      </template>
     </div>
     <router-view/>
   </div>
@@ -60,6 +60,20 @@ export default {
       } else {
         return true
       }
+    },
+    attrLinkC: function() {
+      if (this.$route.path == '/chat') {
+        return 'disable'
+      } else {
+        return ''
+      }
+    },
+    attrLinkS: function() {
+      if (this.$route.path == '/') {
+        return 'disable'
+      } else {
+        return ''
+      }
     }
   }
 }
@@ -73,38 +87,51 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
 #nav {
   position: fixed;
   left: 0px;
   top: 0px;
   width: 100%;
-  height: 60px;
+  height: 30px;
+  display: table;
 }
-
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  text-decoration: none;
+  color: #ffffff;
 }
-
 #nav a.router-link-exact-active {
   color: #42b983;
 }
-
 #nav .nav-link {
-  position: absolute;
-  right: 0px;
-  width: 60px;
-  height: 60px;
-  margin: 0px;
-  border-radius: 0px 0px 0px 100%;
+  width: 120px;
+  height: 30px;
+  margin: auto;
   background-color: #0f0f5e;
-  text-align: right;
+  display: table-cell;
+  text-align: center;
 }
-
+#nav .round-l {
+  border-radius: 0px 0px 0px 10px;
+}
+#nav .round-r {
+  border-radius: 0px 0px 10px 0px;
+}
+#nav .nav-link p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px;
+}
+#nav .nav-link .disable {
+  color: #808080;
+}
 #nav .nav-link img {
   margin: 5px;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
+}
+#nav .nav-link .disable img {
+  filter: contrast(0%) ;
 }
 </style>

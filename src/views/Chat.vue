@@ -86,22 +86,19 @@ h3 {
   margin: 40px 0 0;
 }
 .chat {
-  position: fixed;
-  left: 0px;
-  top: 80px;
-  width: 100%;
-  height: 75%;
+  align: center;
+  margin: auto;
+  padding-top: 50px;
+  max-width: 500px;
 }
 .chat p {
-  display: block;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
   overflow: scroll;
   word-wrap: break-word;
+  height: 80vh;
   margin: 0px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 3px 3px rgba(0,0,0,0.1) inset;
+  background-color: #fefefe;
 }
 .msg-form {
   position: fixed;
@@ -116,7 +113,6 @@ ul {
   overflow: scroll;
 }
 li {
-  /* display: inline-block; */
   text-align: left;
   margin: 5px 10px;
 }

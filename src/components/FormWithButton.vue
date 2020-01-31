@@ -21,13 +21,6 @@ export default {
     submitForm: function () {
       this.$emit('submitForm', this.formValue)
     }
-  },
-  watch: {
-    '$props.set': function (newValue) {
-      if (this.formValue == '') {
-        this.formValue = newValue
-      }
-    }
   }
 }
 </script>
@@ -42,23 +35,18 @@ export default {
   background-color: #f0f0f0;
   font-size: 10pt;
 }
-
 .form-with-button input:focus {
   outline: 0;
 }
-
 .form-with-button input::placeholder {
   color: #b0b0b0;
 }
-
 .form-with-button input:-ms-input-placeholder {
   color: #b0b0b0;
 }
-
 .form-with-button input::-ms-input-placeholder {
   color: #b0b0b0;
 }
-
 .form-with-button button {
   border: none;
   border-radius: 0px 20px 20px 0px;
@@ -67,7 +55,6 @@ export default {
   background-color: #0f0f5e;
   font-size: 10pt;
 }
-
 .form-with-button button:focus {
   outline: 0;
 }

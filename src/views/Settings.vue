@@ -9,13 +9,11 @@
       </p>
     </a>
     <h2 class="username">{{ $userProfile.displayName }}</h2>
-    <!-- <FormWithButton formLabel="Channel Name" buttonLabel="Connect" v-on:submitForm="connect"/> -->
     <InputForm formLabel="Channel Name" :defaultValue="$channelProfile.name" v-on:submitForm="applyChannel"/>
   </div>
 </template>
 
 <script>
-//import FormWithButton from '@/components/FormWithButton.vue'
 import InputForm from '@/components/InputForm.vue'
 
 export default {
@@ -65,6 +63,9 @@ export default {
       } else {
         return true
       }
+    },
+    channelName: function () {
+      return this.$channelProfile.name
     }
   }
 }
@@ -81,14 +82,12 @@ export default {
 .usericon {
   margin: 50px;
 }
-
 .usericon img {
   border-radius: 50%;
   border: solid 1px #c0c0c0;
   width: 150px;
   height: 150px;
 }
-
 .username {
   font-weight: bold;
 }
