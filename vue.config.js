@@ -1,5 +1,6 @@
 module.exports = {
+  publicPath: '/twitch-irc-client-spa',
   outputDir: 'docs',
-  assetsDir: './',
-  publicPath: './'
+  filenameHashing: false,
+  productionSourceMap: false
 }
