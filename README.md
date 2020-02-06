@@ -8,7 +8,7 @@ This is personal project for learning Vue.js.
 
 - By click circle picture in the center, you can authenticate on OpenID Connect for Twitch.
   - It's OK if you do it or not. If you don't authenticate, you can't send your message.
-- Below of that, you should input channel name in the text field.
+- Below that, you should input channel name in the text field.
 - Click header link writen 'Chat', so you can watch messages from other audiences and send your message.
 
 # for Develop
